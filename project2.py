@@ -89,40 +89,53 @@ def player_move(board):
         except ValueError:
             print("Please enter a valid number.")
 
+
 def main():
     print("Welcome to Tic-Tac-Toe!")
-    board = [i for i in range(9)]
-    display_board(board)
 
-    first = ''
-    while first not in ['Y', 'N']:
-        first = input("Do you want to make the first move? (Y/N): ").upper()
+    while True:  # Outer loop to allow multiple games
+        board = [i for i in range(9)]  # Reset the board for a new game
+        display_board(board)
 
-    if first == 'Y':
-        player_turn = True
-    else:
-        player_turn = False
+        first = ''
+        while first not in ['Y', 'N']:
+            first = input("Do you want to make the first move? (Y/N): ").upper()
 
-    while True:
-        if player_turn:
-            player_move(board)
-            display_board(board)
-            if check_winner(board, 'X'):
-                print("Congratulations! You win!")
-                break
-            player_turn = False
-        else:
-            print("Computer's turn...")
-            computer_move(board)
-            display_board(board)
-            if check_winner(board, 'O'):
-                print("Computer wins!")
-                break
+        if first == 'Y':
             player_turn = True
+        else:
+            player_turn = False
 
-        if check_draw(board):
-            print("It's a draw!")
+        while True:
+            if player_turn:
+                player_move(board)
+                display_board(board)
+                if check_winner(board, 'X'):
+                    print("Congratulations! You win!")
+                    break
+                player_turn = False
+            else:
+                print("Computer's turn...")
+                computer_move(board)
+                display_board(board)
+                if check_winner(board, 'O'):
+                    print("Computer wins!")
+                    break
+                player_turn = True
+
+            if check_draw(board):
+                print("It's a draw!")
+                break
+
+        # Ask the user if they want to play again
+        play_again = ''
+        while play_again not in ['Y', 'N']:
+            play_again = input("Do you want to play again? (Y/N): ").upper()
+
+        if play_again == 'N':
+            print("Thank you for playing! Goodbye!")
             break
+
 
 if __name__ == "__main__":
     main()
