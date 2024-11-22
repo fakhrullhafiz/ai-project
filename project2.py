@@ -63,22 +63,6 @@ def dfs(board, depth, is_maximizing):
             best_score = min(best_score, score)
         return best_score
 
-# Function to determine the computer's move
-def computer_move(board):
-    best_score = float('-inf')
-    best_moves = []
-    for move in get_available_moves(board):
-        board[move] = 'O'
-        score = dfs(board, 0, False)
-        board[move] = move
-        if score > best_score:
-            best_score = score
-            best_moves = [move]
-        elif score == best_score:
-            best_moves.append(move)
-    best_move = random.choice(best_moves)
-    board[best_move] = 'O'
-
 # Function to handle the player's move
 def player_move(board):
     while True:
@@ -92,13 +76,57 @@ def player_move(board):
         except ValueError:
             print("Please enter a valid number.")
 
-# Main game function
+# Function to determine the computer's move based on difficulty
+def computer_move(board, difficulty):
+    if difficulty == 'EASY':
+        # Random move
+        move = random.choice(get_available_moves(board))
+        board[move] = 'O'
+    elif difficulty == 'MEDIUM':
+        # 50% chance to play optimally, 50% random move
+        if random.random() < 0.5:
+            move = random.choice(get_available_moves(board))
+        else:
+            best_score = float('-inf')
+            best_moves = []
+            for move in get_available_moves(board):
+                board[move] = 'O'
+                score = dfs(board, 0, False)
+                board[move] = move
+                if score > best_score:
+                    best_score = score
+                    best_moves = [move]
+                elif score == best_score:
+                    best_moves.append(move)
+            move = random.choice(best_moves)
+        board[move] = 'O'
+    else:  # HARD (optimal play)
+        best_score = float('-inf')
+        best_moves = []
+        for move in get_available_moves(board):
+            board[move] = 'O'
+            score = dfs(board, 0, False)
+            board[move] = move
+            if score > best_score:
+                best_score = score
+                best_moves = [move]
+            elif score == best_score:
+                best_moves.append(move)
+        move = random.choice(best_moves)
+        board[move] = 'O'
+
+# Main function with difficulty selection
 def main():
     print("Welcome to Tic-Tac-Toe!")
 
     while True:  # Allow multiple games
         board = [i for i in range(9)]  # Initialize the board
         display_board(board)
+
+        # Choose difficulty
+        difficulty = ''
+        while difficulty not in ['EASY', 'MEDIUM', 'HARD']:
+            difficulty = input("Choose difficulty (EASY, MEDIUM, HARD): ").upper()
 
         # Ask the user if they want to make the first move
         first = ''
@@ -121,7 +149,7 @@ def main():
                 player_turn = False
             else:
                 print("Computer's turn...")
-                computer_move(board)
+                computer_move(board, difficulty)
                 display_board(board)
                 if check_winner(board, 'O'):
                     print("Computer wins!")
