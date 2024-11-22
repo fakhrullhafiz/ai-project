@@ -10,6 +10,7 @@ def display_board(board):
     print(f" {board[6]} | {board[7]} | {board[8]} ")
     print("\n")
 
+
 # Check if a player has won
 def check_winner(board, player):
     win_conditions = [
@@ -27,13 +28,16 @@ def check_winner(board, player):
             return True
     return False
 
+
 # Check if the game is a draw
 def check_draw(board):
     return all(isinstance(x, str) for x in board)
 
+
 # Get all available moves on the board
 def get_available_moves(board):
     return [i for i, x in enumerate(board) if x != 'X' and x != 'O']
+
 
 # Depth-First Search function to evaluate game states
 def dfs(board, depth, is_maximizing):
@@ -63,6 +67,7 @@ def dfs(board, depth, is_maximizing):
             best_score = min(best_score, score)
         return best_score
 
+
 # Function to handle the player's move
 def player_move(board):
     while True:
@@ -75,6 +80,7 @@ def player_move(board):
                 print("Invalid move. Try again.")
         except ValueError:
             print("Please enter a valid number.")
+
 
 # Function to determine the computer's move based on difficulty
 def computer_move(board, difficulty):
@@ -115,6 +121,7 @@ def computer_move(board, difficulty):
         move = random.choice(best_moves)
         board[move] = 'O'
 
+
 # Main function with difficulty selection
 def main():
     print("Welcome to Tic-Tac-Toe!")
@@ -127,6 +134,7 @@ def main():
         difficulty = ''
         while difficulty not in ['EASY', 'MEDIUM', 'HARD']:
             difficulty = input("Choose difficulty (EASY, MEDIUM, HARD): ").upper()
+            print("You are playing game mode: " + difficulty)
 
         # Ask the user if they want to make the first move
         first = ''
@@ -168,6 +176,7 @@ def main():
         if play_again == 'N':
             print("Thank you for playing! Goodbye!")
             break
+
 
 # Run the game
 if __name__ == "__main__":
