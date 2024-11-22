@@ -1,4 +1,6 @@
-# Tic-Tac-Toe Game using Minimax Algorithm
+import random  # Import random module for random selection
+
+# Tic-Tac-Toe Game using Minimax Algorithm with Randomized Computer Moves
 
 def display_board(board):
     print("\n")
@@ -60,14 +62,19 @@ def minimax(board, depth, is_maximizing):
 
 def computer_move(board):
     best_score = float('-inf')
-    best_move = None
+    best_moves = []  # List to store moves with the highest score
     for move in get_available_moves(board):
         board[move] = 'O'
         score = minimax(board, 0, False)
         board[move] = move  # Undo move
         if score > best_score:
             best_score = score
-            best_move = move
+            best_moves = [move]  # Start a new list with this move
+        elif score == best_score:
+            best_moves.append(move)  # Add this move to the list
+
+    # Randomly select a move from the best moves
+    best_move = random.choice(best_moves)
     board[best_move] = 'O'
 
 def player_move(board):
